@@ -2,29 +2,43 @@
   <div class="monthselection">
     <div>
       <div class="jumbotron">
-        <h2><span class="glyphicon glyphicon-list-alt"></span>&nbsp;Datadin</h2>
+        <h2><span class="glyphicon glyphicon-list-alt"></span>&nbsp;Datadin - Estados Financieros</h2>
         <div class="row">
-          <div class="col-sm-3">
+          <div class="col-sm-2">
             <h4>Mes</h4>
             <select class="form-control" v-on:change="monthChanged" v-model="month">
               <option value="">Todos</option>
               <option v-for="month in months" v-bind:value="month.id">{{month.name}}</option>
             </select>
           </div>
-          <div class="col-sm-3">
+          <div class="col-sm-2">
             <h4>Año</h4>
             <select class="form-control" v-on:change="yearChanged" v-model="year">
               <option v-for="year in years" v-bind:value="year.id">{{year.name}}</option>
             </select>
           </div>
-          <div class="col-sm-3">
-            <h4>Reup</h4>
+          <div class="col-sm-2">
+            <h4>Division</h4>
+            <select class="form-control" v-on:change="divitionChanged" v-model="divition">
+              <option value="">Todas</option>
+              <option v-for="divition in divitions" v-bind:value="divition.Id">{{divition.Nombre}}</option>
+            </select>
+          </div>
+          <div class="col-sm-2">
+            <h4>Grupo</h4>
+            <select class="form-control" v-on:change="grupoChanged" v-model="grupo">
+              <option value="">Todos</option>
+              <option v-for="grupo in grupos" v-bind:value="grupo.Id">{{grupo.Nombre}}</option>
+            </select>
+          </div>
+          <div class="col-sm-2">
+            <h4>Empresas</h4>
             <select class="form-control" v-on:change="reeupChanged" v-model="reeup">
               <option value="">Todas</option>
               <option v-for="reeup in reeups" v-bind:value="reeup.Id">{{reeup.Nombre}}</option>
             </select>
           </div>
-          <div class="col-sm-3">
+          <div class="col-sm-2">
             <h4>Modelo</h4>
             <select class="form-control" v-on:change="modeloChanged" v-model="modelo">
               <option v-for="modelo in modelos" v-bind:value="modelo.id">{{modelo.name}}</option>
@@ -47,7 +61,11 @@
         modelos: [],
         modelo: 5920,
         reeups: [],
-        reeup: ''
+        reeup: '',
+        divitions: [],
+        divition: '',
+        grupos: [],
+        grupo: ''
       }
     },
     methods: {
@@ -59,6 +77,65 @@
           }
         }
         this.$emit('yearChanged', e.target.value)
+      },
+      divitionChanged: function (e) {
+        console.log('divitionChanged SourceSelection')
+        for (var i = 0; i < this.divitions.length; i++) {
+          if (this.divitions[i].id === e.target.value) {
+            this.divition = this.divitions[i]
+          }
+        }
+        if (this.divition === '') {
+          this.grupos = this.data.Grupos
+          this.grupo = ''
+          this.reeups = this.data.Empresas
+          this.reeup = ''
+        } else {
+          this.grupos = []
+          for (var j = 0; j < this.data.Grupos.length; ++j) {
+            if (parseInt(this.data.Grupos[j].DivisionId) === parseInt(this.divition)) {
+              this.grupos.push(this.data.Grupos[j])
+            }
+          }
+          this.grupo = ''
+          this.reeups = []
+          for (var k = 0; k < this.data.Empresas.length; ++k) {
+            if (parseInt(this.data.Empresas[k].DivisionId) === parseInt(this.divition)) {
+              this.reeups.push(this.data.Empresas[k])
+            }
+          }
+          this.reeup = ''
+        }
+        this.$emit('divitionChanged', e.target.value)
+      },
+      grupoChanged: function (e) {
+        console.log('grupoChanged SourceSelection')
+        for (var i = 0; i < this.grupos.length; i++) {
+          if (this.grupos[i].id === e.target.value) {
+            this.grupo = this.grupos[i]
+          }
+        }
+        if (this.grupo === '') {
+          if (this.divition === '') {
+            this.reeups = this.data.Empresas
+          } else {
+            this.reeups = []
+            for (var l = 0; l < this.data.Empresas.length; ++l) {
+              if (parseInt(this.data.Empresas[l].DivisionId) === parseInt(this.divition)) {
+                this.reeups.push(this.data.Empresas[l])
+              }
+            }
+            this.reeup = ''
+          }
+        } else {
+          this.reeups = []
+          for (var k = 0; k < this.data.Empresas.length; ++k) {
+            if (parseInt(this.data.Empresas[k].GrupoId) === parseInt(this.grupo)) {
+              this.reeups.push(this.data.Empresas[k])
+            }
+          }
+        }
+        this.$emit('grupoChanged', e.target.value)
       },
       monthChanged: function (e) {
         console.log('monthChanged SourceSelection')
@@ -117,9 +194,13 @@
         {id: 5925, name: 5925},
         {id: 5926, name: 5926}
       ]
-      this.$http.get('http://127.0.0.1:29530/datadin/empresa/list')
+      this.data = null
+      this.$http.get('http://192.168.43.65:29530/datadin/data')
         .then(response => {
-          this.reeups = response.data
+          this.data = response.data
+          this.reeups = response.data.Empresas
+          this.divitions = response.data.Divisiones
+          this.grupos = response.data.Grupos
         })
     }
   }

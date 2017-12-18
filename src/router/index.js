@@ -1,15 +1,21 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import Hello from '@/components/Hello'
+import Divisiones from '@/components/Divisiones'
+import Datadin from '@/components/Datadin'
 
 Vue.use(Router)
 
 export default new Router({
   routes: [
     {
-      path: '/',
-      name: 'Hello',
-      component: Hello
+      path: '/ef',
+      name: 'Datadin',
+      component: Datadin
+    },
+    {
+      path: '/divisiones',
+      name: 'divisiones',
+      component: Divisiones
     }
   ]
 })
