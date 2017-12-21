@@ -86,21 +86,20 @@
           }
         }
         if (this.divition === '') {
-          this.grupos = this.data.Grupos
-          this.grupo = ''
+          this.grupos = []
           this.reeups = this.data.Empresas
-          this.reeup = ''
         } else {
           this.grupos = []
+          this.grupo = ''
           for (var j = 0; j < this.data.Grupos.length; ++j) {
             if (parseInt(this.data.Grupos[j].DivisionId) === parseInt(this.divition)) {
               this.grupos.push(this.data.Grupos[j])
             }
           }
-          this.grupo = ''
           this.reeups = []
           for (var k = 0; k < this.data.Empresas.length; ++k) {
             if (parseInt(this.data.Empresas[k].DivisionId) === parseInt(this.divition)) {
+              console.log(this.data.Empresas[k].Nombre)
               this.reeups.push(this.data.Empresas[k])
             }
           }
@@ -115,24 +114,31 @@
             this.grupo = this.grupos[i]
           }
         }
-        if (this.grupo === '') {
-          if (this.divition === '') {
-            this.reeups = this.data.Empresas
+        if (this.divition === '') {
+          this.grupos = []
+          this.reeups = this.data.Empresas
+          this.grupo = ''
+          this.reeup = ''
+        } else {
+          if (this.grupo === '') {
+            this.reeups = []
+            this.reeup = ''
+            for (var p = 0; p < this.data.Empresas.length; ++p) {
+              if (parseInt(this.data.Empresas[p].DivisionId) === parseInt(this.divition)) {
+                this.reeups.push(this.data.Empresas[p])
+              }
+            }
+            this.reeup = ''
           } else {
             this.reeups = []
+            this.grupos = []
             for (var l = 0; l < this.data.Empresas.length; ++l) {
-              if (parseInt(this.data.Empresas[l].DivisionId) === parseInt(this.divition)) {
+              if (parseInt(this.data.Empresas[l].GrupoId) === parseInt(this.grupo) && parseInt(this.data.Empresas[l].DivisionId) === parseInt(this.divition)) {
                 this.reeups.push(this.data.Empresas[l])
               }
             }
             this.reeup = ''
-          }
-        } else {
-          this.reeups = []
-          for (var k = 0; k < this.data.Empresas.length; ++k) {
-            if (parseInt(this.data.Empresas[k].GrupoId) === parseInt(this.grupo)) {
-              this.reeups.push(this.data.Empresas[k])
-            }
+            this.grupo = ''
           }
         }
         this.$emit('grupoChanged', e.target.value)
@@ -200,7 +206,6 @@
           this.data = response.data
           this.reeups = response.data.Empresas
           this.divitions = response.data.Divisiones
-          this.grupos = response.data.Grupos
         })
     }
   }
