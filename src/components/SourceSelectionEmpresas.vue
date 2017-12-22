@@ -36,28 +36,73 @@
     },
     methods: {
       divitionChanged: function (e) {
-        console.log('divitionChanged SourceSelectionEmpresas')
+        console.log('divitionChanged SourceSelection')
+        for (var i = 0; i < this.divitions.length; i++) {
+          if (this.divitions[i].id === e.target.value) {
+            this.divition = this.divitions[i]
+          }
+        }
         if (this.divition === '') {
-          this.grupos = this.data.Grupos
-          this.grupo = ''
+          this.grupos = []
+          this.reeups = this.data.Empresas
         } else {
           this.grupos = []
+          this.grupo = ''
           for (var j = 0; j < this.data.Grupos.length; ++j) {
             if (parseInt(this.data.Grupos[j].DivisionId) === parseInt(this.divition)) {
               this.grupos.push(this.data.Grupos[j])
             }
           }
-          this.grupo = ''
+          this.reeups = []
+          for (var k = 0; k < this.data.Empresas.length; ++k) {
+            if (parseInt(this.data.Empresas[k].DivisionId) === parseInt(this.divition)) {
+              console.log(this.data.Empresas[k].Nombre)
+              this.reeups.push(this.data.Empresas[k])
+            }
+          }
+          this.reeup = ''
         }
         this.$emit('divitionChanged', e.target.value)
       },
       grupoChanged: function (e) {
-        console.log('grupoChanged SourceSelectionEmpresas')
+        console.log('grupoChanged SourceSelection')
+        for (var i = 0; i < this.grupos.length; i++) {
+          if (this.grupos[i].id === e.target.value) {
+            this.grupo = this.grupos[i]
+          }
+        }
+        if (this.divition === '') {
+          this.grupos = []
+          this.reeups = this.data.Empresas
+          this.reeup = ''
+          this.grupo = ''
+        } else {
+          if (this.grupo === '') {
+            this.reeups = []
+            this.reeup = ''
+            for (var p = 0; p < this.data.Empresas.length; ++p) {
+              if (parseInt(this.data.Empresas[p].DivisionId) === parseInt(this.divition)) {
+                this.reeups.push(this.data.Empresas[p])
+              }
+            }
+            this.reeup = ''
+            this.grupo = ''
+          } else {
+            this.reeups = []
+            for (var l = 0; l < this.data.Empresas.length; ++l) {
+              if (parseInt(this.data.Empresas[l].GrupoId) === parseInt(this.grupo) && parseInt(this.data.Empresas[l].DivisionId) === parseInt(this.divition)) {
+                this.reeups.push(this.data.Empresas[l])
+              }
+            }
+            this.reeup = ''
+          }
+        }
         this.$emit('grupoChanged', e.target.value)
       }
     },
     created: function () {
       this.data = null
+      // this.$http.get('http://192.168.43.65:29530/datadin/data')
       this.$http.get('http://192.168.43.65:29530/datadin/data')
         .then(response => {
           this.data = response.data

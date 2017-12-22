@@ -10,12 +10,20 @@
           <th>
             Nombre
           </th>
+          <th>
+            Division
+          </th>
+          <th>
+            Grupo
+          </th>
         </tr>
         </thead>
         <tbody>
         <tr v-for="empresa in empresas">
           <td>{{empresa.Id}}</td>
           <td>{{empresa.NombreCompleto}}</td>
+          <td>{{getDivisionNameById(empresa.DivisionId)}}</td>
+          <td>{{getGrupoNameById(empresa.GrupoId, empresa.DivisionId)}}</td>
         </tr>
         </tbody>
       </table>
@@ -33,11 +41,26 @@
       }
     },
     methods: {
+      getDivisionNameById: function (value) {
+        for (var k = 0; k < this.data.Divisiones.length; ++k) {
+          if (parseInt(this.data.Divisiones[k].Id) === parseInt(value)) {
+            return this.data.Divisiones[k].Nombre
+          }
+        }
+        return 'Sin nombre'
+      },
+      getGrupoNameById: function (value1, value2) {
+        for (var k = 0; k < this.data.Grupos.length; ++k) {
+          if (parseInt(this.data.Grupos[k].Id) === parseInt(value1) && parseInt(this.data.Grupos[k].DivisionId) === parseInt(value2)) {
+            return this.data.Grupos[k].Nombre
+          }
+        }
+        return 'Sin nombre'
+      },
       updateList: function () {
         this.empresas = []
         if (this.grupo === '') {
           if (this.divition === '') {
-            console.log('1')
             this.empresas = this.data.Empresas
           } else {
             console.log('2')
@@ -49,9 +72,14 @@
           }
         } else {
           console.log('3')
-          for (var j = 0; j < this.data.Empresas.length; ++j) {
-            if (parseInt(this.data.Empresas[j].GrupoId) === parseInt(this.grupo) && parseInt(this.data.Empresas[j].DivisionId) === parseInt(this.divition)) {
-              this.empresas.push(this.data.Empresas[j])
+          if (this.divition === '') {
+            this.grupo = ''
+            this.empresas = this.data.Empresas
+          } else {
+            for (var j = 0; j < this.data.Empresas.length; ++j) {
+              if (parseInt(this.data.Empresas[j].GrupoId) === parseInt(this.grupo) && parseInt(this.data.Empresas[j].DivisionId) === parseInt(this.divition)) {
+                this.empresas.push(this.data.Empresas[j])
+              }
             }
           }
         }
@@ -76,7 +104,7 @@
     },
     watch: {
       grupo: function (val) {
-        console.log('updateGroup NewslistEmpresas.vue')
+        console.log('updateGrupo NewslistEmpresas.vue')
         this.updateGrupo(val)
       },
       divition: function (val) {

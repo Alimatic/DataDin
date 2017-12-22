@@ -3,9 +3,9 @@
   <div class="container" id="app" style="margin: 2em; width: auto;">
 
     <SourceSelection v-on:monthChanged="monthChanged" v-on:yearChanged="yearChanged" v-on:reeupChanged="reeupChanged"
-                     v-on:divitionChanged="divitionChanged" v-on:groupChanged="groupChanged"
+                     v-on:divitionChanged="divitionChanged" v-on:grupoChanged="grupoChanged"
                      v-on:modeloChanged="modeloChanged"></SourceSelection>
-    <Newslist v-bind:month="month" v-bind:year="year" v-bind:modelo="modelo" v-bind:reeup="reeup" v-bind:divition="divition" v-bind:group="group"></Newslist>
+    <Newslist v-bind:month="month" v-bind:year="year" v-bind:modelo="modelo" v-bind:reeup="reeup" v-bind:divition="divition" v-bind:grupo="grupo"></Newslist>
 
   </div>
 </template>
@@ -26,7 +26,7 @@
         modelo: 0,
         reeup: '',
         divition: '',
-        group: ''
+        grupo: ''
       }
     },
     methods: {
@@ -50,9 +50,9 @@
         console.log('divitionChanged App.vue')
         this.divition = divition
       },
-      groupChanged: function (group) {
-        console.log('groupChanged App.vue')
-        this.group = group
+      grupoChanged: function (grupo) {
+        console.log('grupoChanged App.vue')
+        this.grupo = grupo
       }
     }
   }

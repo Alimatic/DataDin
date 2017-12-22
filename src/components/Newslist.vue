@@ -41,7 +41,7 @@
 <script>
   export default {
     name: 'newslist',
-    props: ['year', 'month', 'reeup', 'modelo', 'group', 'divition'],
+    props: ['year', 'month', 'reeup', 'modelo', 'grupo', 'divition'],
     data () {
       return {
         reports: [],
@@ -54,13 +54,13 @@
         let val = (value / 1).toFixed(2).replace(',', '.')
         return val.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')
       },
-      updateList: function (month, year, reeup, modelo, group, divition) {
+      updateList: function (month, year, reeup, modelo, grupo, divition) {
         console.log('updateList')
         modelo = modelo === 0 ? 5920 : modelo
         year = year === 0 ? 2017 : year
         this.reports = []
         this.status = 'Cargando...'
-        this.$http.get(encodeURI('http://192.168.43.65:29530/datadin/ef?Model=' + modelo + '&Year=' + year + '&Month=' + month + '&Reeup=' + reeup + '&Group=' + group + '&Divition=' + divition))
+        this.$http.get(encodeURI('http://192.168.43.65:29530/datadin/ef?Model=' + modelo + '&Year=' + year + '&Month=' + month + '&Empresa=' + reeup + '&Grupo=' + grupo + '&Division=' + divition))
           .then(response => {
             this.reports = response.data
             if (this.reports.length === 0) {
@@ -70,26 +70,26 @@
       },
       updateMonth: function (month) {
         this.month = month
-        this.updateList(this.month, this.year, this.reeup, this.modelo, this.group, this.divition)
+        this.updateList(this.month, this.year, this.reeup, this.modelo, this.grupo, this.divition)
       },
       updateYear: function (year) {
         this.year = year
-        this.updateList(this.month, this.year, this.reeup, this.modelo, this.group, this.divition)
+        this.updateList(this.month, this.year, this.reeup, this.modelo, this.grupo, this.divition)
       },
       updateReeup: function (reeup) {
         this.reeup = reeup
-        this.updateList(this.month, this.year, this.reeup, this.modelo, this.group, this.divition)
+        this.updateList(this.month, this.year, this.reeup, this.modelo, this.grupo, this.divition)
       },
       updateModelo: function (modelo) {
-        this.updateList(this.month, this.year, this.reeup, this.modelo, this.group, this.divition)
+        this.updateList(this.month, this.year, this.reeup, this.modelo, this.grupo, this.divition)
       },
-      updateGroup: function (group) {
-        this.group = group
-        this.updateList(this.month, this.year, this.reeup, this.modelo, this.group, this.divition)
+      updateGrupo: function (grupo) {
+        this.grupo = grupo
+        this.updateList(this.month, this.year, this.reeup, this.modelo, this.grupo, this.divition)
       },
       updateDivition: function (divition) {
         this.divition = divition
-        this.updateList(this.month, this.year, this.reeup, this.modelo, this.group, this.divition)
+        this.updateList(this.month, this.year, this.reeup, this.modelo, this.grupo, this.divition)
       }
     },
     created: function () {
@@ -112,9 +112,9 @@
         console.log('updateModelo Newslist.vue')
         this.updateModelo(val)
       },
-      group: function (val) {
-        console.log('updateGroup Newslist.vue')
-        this.updateGroup(val)
+      grupo: function (val) {
+        console.log('updateGrupo Newslist.vue')
+        this.updateGrupo(val)
       },
       divition: function (val) {
         console.log('updateDivition Newslist.vue')

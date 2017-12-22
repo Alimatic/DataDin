@@ -2,7 +2,7 @@
   <div class="container" style="margin: 2em; width: auto;">
     <div>
       <div class="jumbotron" style="margin: 0;">
-        <h2><span class="glyphicon glyphicon-list-alt"></span>&nbsp;Datadin - Divisiones</h2>
+        <h2><span class="glyphicon glyphicon-list-alt"></span>&nbsp;Datadin - Divisiones - Grupo</h2>
         <div class="row">
           <div class="col-sm-12">
             <div v-for="(divition, index) in divitions">

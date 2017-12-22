@@ -5,6 +5,7 @@ import Datadin from '@/components/Datadin'
 import Filas from '@/components/Filas'
 import Modelos from '@/components/Modelos'
 import Empresas from '@/components/Empresas'
+import HomePage from '@/components/HomePage'
 
 Vue.use(Router)
 
@@ -34,6 +35,10 @@ export default new Router({
       path: '/empresas',
       name: 'empresas',
       component: Empresas
+    },
+    {
+      path: '*',
+      component: HomePage
     }
   ]
 })

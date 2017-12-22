@@ -7,7 +7,7 @@
           <div class="col-sm-12">
             <h4>Modelo</h4>
             <select class="form-control" v-on:change="modeloChanged" v-model="modelo">
-              <option value="">Todos</option>
+              <option value="">Seleccionar modelo</option>
               <option v-for="modelo in modelos" v-bind:value="modelo.id">{{modelo.name}}</option>
             </select>
           </div>
@@ -48,7 +48,6 @@
       this.$http.get('http://192.168.43.65:29530/datadin/data')
         .then(response => {
           this.data = response.data
-          this.filas = response.data.Filas
         })
     }
   }

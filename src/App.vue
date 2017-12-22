@@ -2,7 +2,7 @@
 
   <div>
 
-    <div class="container" id="app" style="margin: 2em; width: auto;">
+    <div class="container" id="app" style="margin: 2em; width: auto; text-align: center;">
 
       <a href="#ef" class="btn btn-success">Estados Financieros</a>
 
@@ -12,7 +12,7 @@
 
       <a href="#empresas" class="btn btn-success">Empresas</a>
 
-      <a href="#divisiones" class="btn btn-success">Divisiones</a>
+      <a href="#divisiones" class="btn btn-success">Divisiones - Grupo</a>
 
     </div>
 

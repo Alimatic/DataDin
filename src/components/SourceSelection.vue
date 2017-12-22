@@ -131,14 +131,12 @@
             this.reeup = ''
           } else {
             this.reeups = []
-            this.grupos = []
             for (var l = 0; l < this.data.Empresas.length; ++l) {
               if (parseInt(this.data.Empresas[l].GrupoId) === parseInt(this.grupo) && parseInt(this.data.Empresas[l].DivisionId) === parseInt(this.divition)) {
                 this.reeups.push(this.data.Empresas[l])
               }
             }
             this.reeup = ''
-            this.grupo = ''
           }
         }
         this.$emit('grupoChanged', e.target.value)

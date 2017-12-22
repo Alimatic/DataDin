@@ -35,10 +35,10 @@
     },
     methods: {
       updateModelo: function (modelo) {
+        this.status = 'Cargando...'
         this.filas = []
         this.modelo = modelo
         if (modelo === '') {
-          this.filas = this.data.Filas
         } else {
           for (var k = 0; k < this.data.Filas.length; ++k) {
             if (parseInt(this.data.Filas[k].ModeloId) === parseInt(this.modelo)) {
@@ -53,8 +53,8 @@
       this.$http.get('http://192.168.43.65:29530/datadin/data')
         .then(response => {
           this.data = response.data
-          this.filas = this.data.Filas
         })
+      this.status = 'Seleccione un modelo'
     },
     watch: {
       modelo: function (val) {
