@@ -8,7 +8,7 @@
             <h4>Modelo</h4>
             <select class="form-control" v-on:change="modeloChanged" v-model="modelo">
               <option value="">Seleccionar modelo</option>
-              <option v-for="modelo in modelos" v-bind:value="modelo.id">{{modelo.name}}</option>
+              <option v-for="modelo in modelos" v-bind:value="modelo.Id">{{modelo.Id}}</option>
             </select>
           </div>
         </div>
@@ -29,7 +29,7 @@
       modeloChanged: function (e) {
         console.log('modeloChanged SourceSelection')
         for (var i = 0; i < this.modelos.length; i++) {
-          if (this.modelos[i].id === e.target.value) {
+          if (this.modelos[i].Id === e.target.value) {
             this.modelo = this.modelos[i]
           }
         }
@@ -37,21 +37,15 @@
       }
     },
     created: function () {
-      this.modelos = [
-        {id: 5920, name: 5920},
-        {id: 5921, name: 5921},
-        {id: 5924, name: 5924},
-        {id: 5925, name: 5925},
-        {id: 5926, name: 5926}
-      ]
+      this.modelos = []
       this.data = null
-      this.$http.get('http://192.168.43.65:29530/datadin/data')
+      this.$http.get('http://192.168.43.46:80/datadin2/data')
         .then(response => {
           this.data = response.data
+          this.modelos = this.data.Models
         })
     }
   }
 </script>
-<!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
 </style>

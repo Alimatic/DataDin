@@ -21,9 +21,9 @@
         <tbody>
         <tr v-for="empresa in empresas">
           <td>{{empresa.Id}}</td>
-          <td>{{empresa.NombreCompleto}}</td>
+          <td>{{empresa.FullName}}</td>
           <td>{{getDivisionNameById(empresa.DivisionId)}}</td>
-          <td>{{getGrupoNameById(empresa.GrupoId, empresa.DivisionId)}}</td>
+          <td>{{getGrupoNameById(empresa.GroupId, empresa.DivisionId)}}</td>
         </tr>
         </tbody>
       </table>
@@ -42,17 +42,17 @@
     },
     methods: {
       getDivisionNameById: function (value) {
-        for (var k = 0; k < this.data.Divisiones.length; ++k) {
-          if (parseInt(this.data.Divisiones[k].Id) === parseInt(value)) {
-            return this.data.Divisiones[k].Nombre
+        for (var k = 0; k < this.data.Divisions.length; ++k) {
+          if (parseInt(this.data.Divisions[k].Id) === parseInt(value)) {
+            return this.data.Divisions[k].Name
           }
         }
         return 'Sin nombre'
       },
       getGrupoNameById: function (value1, value2) {
-        for (var k = 0; k < this.data.Grupos.length; ++k) {
-          if (parseInt(this.data.Grupos[k].Id) === parseInt(value1) && parseInt(this.data.Grupos[k].DivisionId) === parseInt(value2)) {
-            return this.data.Grupos[k].Nombre
+        for (var k = 0; k < this.data.Groups.length; ++k) {
+          if (parseInt(this.data.Groups[k].Id) === parseInt(value1) && parseInt(this.data.Groups[k].DivisionId) === parseInt(value2)) {
+            return this.data.Groups[k].Name
           }
         }
         return 'Sin nombre'
@@ -61,12 +61,12 @@
         this.empresas = []
         if (this.grupo === '') {
           if (this.divition === '') {
-            this.empresas = this.data.Empresas
+            this.empresas = this.data.Enterprises
           } else {
             console.log('2')
-            for (var k = 0; k < this.data.Empresas.length; ++k) {
-              if (parseInt(this.data.Empresas[k].DivisionId) === parseInt(this.divition)) {
-                this.empresas.push(this.data.Empresas[k])
+            for (var k = 0; k < this.data.Enterprises.length; ++k) {
+              if (parseInt(this.data.Enterprises[k].DivisionId) === parseInt(this.divition)) {
+                this.empresas.push(this.data.Enterprises[k])
               }
             }
           }
@@ -74,11 +74,11 @@
           console.log('3')
           if (this.divition === '') {
             this.grupo = ''
-            this.empresas = this.data.Empresas
+            this.empresas = this.data.Enterprises
           } else {
-            for (var j = 0; j < this.data.Empresas.length; ++j) {
-              if (parseInt(this.data.Empresas[j].GrupoId) === parseInt(this.grupo) && parseInt(this.data.Empresas[j].DivisionId) === parseInt(this.divition)) {
-                this.empresas.push(this.data.Empresas[j])
+            for (var j = 0; j < this.data.Enterprises.length; ++j) {
+              if (parseInt(this.data.Enterprises[j].GroupId) === parseInt(this.grupo) && parseInt(this.data.Enterprises[j].DivisionId) === parseInt(this.divition)) {
+                this.empresas.push(this.data.Enterprises[j])
               }
             }
           }
@@ -96,10 +96,10 @@
     },
     created: function () {
       this.data = null
-      this.$http.get('http://192.168.43.65:29530/datadin/data')
+      this.$http.get('http://192.168.43.46:80/datadin2/data')
         .then(response => {
           this.data = response.data
-          this.empresas = this.data.Empresas
+          this.empresas = this.data.Enterprises
         })
     },
     watch: {

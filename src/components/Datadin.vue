@@ -3,9 +3,9 @@
   <div class="container" id="app" style="margin: 2em; width: auto;">
 
     <SourceSelection v-on:monthChanged="monthChanged" v-on:yearChanged="yearChanged" v-on:reeupChanged="reeupChanged"
-                     v-on:divitionChanged="divitionChanged" v-on:grupoChanged="grupoChanged"
+                     v-on:divitionChanged="divitionChanged" v-on:grupoChanged="grupoChanged" v-on:dayChanged="dayChanged"
                      v-on:modeloChanged="modeloChanged"></SourceSelection>
-    <Newslist v-bind:month="month" v-bind:year="year" v-bind:modelo="modelo" v-bind:reeup="reeup" v-bind:divition="divition" v-bind:grupo="grupo"></Newslist>
+    <Newslist v-bind:month="month" v-bind:year="year" v-bind:modelo="modelo" v-bind:reeup="reeup" v-bind:divition="divition" v-bind:grupo="grupo" v-bind:day="day"></Newslist>
 
   </div>
 </template>
@@ -23,6 +23,7 @@
       return {
         month: '',
         year: 0,
+        day: 1,
         modelo: 0,
         reeup: '',
         divition: '',
@@ -33,6 +34,10 @@
       monthChanged: function (month) {
         console.log('monthChanged App.vue')
         this.month = month
+      },
+      dayChanged: function (day) {
+        console.log('dayChanged App.vue')
+        this.day = day
       },
       yearChanged: function (year) {
         console.log('yearChanged App.vue')

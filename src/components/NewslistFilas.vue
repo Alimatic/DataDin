@@ -15,7 +15,7 @@
         <tbody>
         <tr v-for="fila in filas">
           <td>{{fila.Id}}</td>
-          <td>{{fila.Descripcion}}</td>
+          <td>{{fila.Description}}</td>
         </tr>
         </tbody>
       </table>
@@ -40,9 +40,9 @@
         this.modelo = modelo
         if (modelo === '') {
         } else {
-          for (var k = 0; k < this.data.Filas.length; ++k) {
-            if (parseInt(this.data.Filas[k].ModeloId) === parseInt(this.modelo)) {
-              this.filas.push(this.data.Filas[k])
+          for (var k = 0; k < this.data.Rows.length; ++k) {
+            if (parseInt(this.data.Rows[k].ModelId) === parseInt(this.modelo)) {
+              this.filas.push(this.data.Rows[k])
             }
           }
         }
@@ -50,7 +50,7 @@
     },
     created: function () {
       this.data = null
-      this.$http.get('http://192.168.43.65:29530/datadin/data')
+      this.$http.get('http://192.168.43.46:80/datadin2/data')
         .then(response => {
           this.data = response.data
         })

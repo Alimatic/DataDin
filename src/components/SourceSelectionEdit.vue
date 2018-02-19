@@ -1,56 +1,48 @@
 <template>
+
   <div class="monthselection">
     <div>
       <div class="jumbotron">
-        <h2><span class="glyphicon glyphicon-list-alt"></span>&nbsp;Consultas</h2>
+        <h2><span class="glyphicon glyphicon-list-alt"></span>&nbsp;Datadin - Edit
+
+        </h2>
+
         <div class="row">
-          <div class="col-sm-3">
-            <h4>Division</h4>
-            <select class="form-control" v-on:change="divitionChanged" v-model="divition">
-              <option value="">Todas</option>
-              <option v-for="divition in divitions" v-bind:value="divition.Id">{{divition.Name}}</option>
-            </select>
-          </div>
-          <div class="col-sm-3">
-            <h4>Grupo</h4>
-            <select class="form-control" v-on:change="grupoChanged" v-model="grupo">
-              <option value="">Todos</option>
-              <option v-for="grupo in grupos" v-bind:value="grupo.Id">{{grupo.Name}}</option>
-            </select>
-          </div>
-          <div class="col-sm-3">
-            <h4>Empresas</h4>
-            <select class="form-control" v-on:change="reeupChanged" v-model="reeup">
-              <option value="">Todas</option>
-              <option v-for="reeup in reeups" v-bind:value="reeup.Id">{{reeup.Name}}</option>
-            </select>
-          </div>
-          <div class="col-sm-3">
+          <div class="col-sm-2">
             <h4>Modelo</h4>
             <select class="form-control" v-on:change="modeloChanged" v-model="modelo">
               <option v-for="modelo in modelos" v-bind:value="modelo.Id">{{modelo.Id}}</option>
             </select>
           </div>
-        </div>
-        <div class="row">
-          <div class="col-sm-3">
-            <h4>Dia</h4>
-            <select class="form-control" v-on:change="dayChanged" v-model="day">
-              <option v-for="day in days" v-bind:value="day.id">{{day.name}}</option>
+          <div class="col-sm-2">
+            <h4>Año</h4>
+            <select class="form-control" v-on:change="yearChanged" v-model="year">
+              <option v-for="year in years" v-bind:value="year.id">{{year.name}}</option>
             </select>
           </div>
-          <div class="col-sm-3">
+          <div class="col-sm-2">
             <h4>Mes</h4>
             <select class="form-control" v-on:change="monthChanged" v-model="month">
               <option value="">Todos</option>
               <option v-for="month in months" v-bind:value="month.id">{{month.name}}</option>
             </select>
           </div>
-          <div class="col-sm-3">
-            <h4>Año</h4>
-            <select class="form-control" v-on:change="yearChanged" v-model="year">
-              <option v-for="year in years" v-bind:value="year.id">{{year.name}}</option>
+          <div class="col-sm-2">
+            <h4>Dia</h4>
+            <select class="form-control" v-on:change="dayChanged" v-model="day">
+              <option v-for="day in days" v-bind:value="day.id">{{day.name}}</option>
             </select>
+          </div>
+          <div class="col-sm-2">
+            <h4>Empresa</h4>
+            <select class="form-control" v-on:change="reeupChanged" v-model="reeup">
+              <option v-for="reeup in reeups" v-bind:value="reeup.Id">{{reeup.Name}}</option>
+            </select>
+          </div>
+          <div class="col-sm-2">
+            <h4></h4>
+            <button v-on:click="editData()" class="btn btn-primary form-control" style="margin-top: 2em;">Mostrar datos
+            </button>
           </div>
         </div>
       </div>
@@ -63,22 +55,28 @@
     data () {
       return {
         days: [],
-        day: '',
+        day: 0,
         months: [],
-        month: '',
+        month: 0,
         years: [],
-        year: 2018,
+        year: 0,
         modelos: [],
-        modelo: 5920,
+        modelo: '',
+        modeloFull: '',
         reeups: [],
         reeup: '',
         divitions: [],
         divition: '',
         grupos: [],
-        grupo: ''
+        grupo: '',
+        records: []
       }
     },
     methods: {
+      editData: function () {
+        console.log('editData')
+        this.$emit('editData')
+      },
       yearChanged: function (e) {
         console.log('yearChanged SourceSelection')
         for (var i = 0; i < this.years.length; i++) {
@@ -97,20 +95,20 @@
         }
         if (this.divition === '') {
           this.grupos = []
-          this.reeups = this.data.Enterprises
+          this.reeups = this.data.Empresas
         } else {
           this.grupos = []
           this.grupo = ''
-          for (var j = 0; j < this.data.Groups.length; ++j) {
-            if (parseInt(this.data.Groups[j].DivisionId) === parseInt(this.divition)) {
-              this.grupos.push(this.data.Groups[j])
+          for (var j = 0; j < this.data.Grupos.length; ++j) {
+            if (parseInt(this.data.Grupos[j].DivisionId) === parseInt(this.divition)) {
+              this.grupos.push(this.data.Grupos[j])
             }
           }
           this.reeups = []
-          for (var k = 0; k < this.data.Enterprises.length; ++k) {
-            if (parseInt(this.data.Enterprises[k].DivisionId) === parseInt(this.divition)) {
-              console.log(this.data.Enterprises[k].Nombre)
-              this.reeups.push(this.data.Enterprises[k])
+          for (var k = 0; k < this.data.Empresas.length; ++k) {
+            if (parseInt(this.data.Empresas[k].DivisionId) === parseInt(this.divition)) {
+              console.log(this.data.Empresas[k].Nombre)
+              this.reeups.push(this.data.Empresas[k])
             }
           }
           this.reeup = ''
@@ -126,39 +124,30 @@
         }
         if (this.divition === '') {
           this.grupos = []
-          this.reeups = this.data.Enterprises
+          this.reeups = this.data.Empresas
           this.grupo = ''
           this.reeup = ''
         } else {
           if (this.grupo === '') {
             this.reeups = []
             this.reeup = ''
-            for (var p = 0; p < this.data.Enterprises.length; ++p) {
-              if (parseInt(this.data.Enterprises[p].DivisionId) === parseInt(this.divition)) {
-                this.reeups.push(this.data.Enterprises[p])
+            for (var p = 0; p < this.data.Empresas.length; ++p) {
+              if (parseInt(this.data.Empresas[p].DivisionId) === parseInt(this.divition)) {
+                this.reeups.push(this.data.Empresas[p])
               }
             }
             this.reeup = ''
           } else {
             this.reeups = []
-            for (var l = 0; l < this.data.Enterprises.length; ++l) {
-              if (parseInt(this.data.Enterprises[l].GroupId) === parseInt(this.grupo) && parseInt(this.data.Enterprises[l].DivisionId) === parseInt(this.divition)) {
-                this.reeups.push(this.data.Enterprises[l])
+            for (var l = 0; l < this.data.Empresas.length; ++l) {
+              if (parseInt(this.data.Empresas[l].GrupoId) === parseInt(this.grupo) && parseInt(this.data.Empresas[l].DivisionId) === parseInt(this.divition)) {
+                this.reeups.push(this.data.Empresas[l])
               }
             }
             this.reeup = ''
           }
         }
         this.$emit('grupoChanged', e.target.value)
-      },
-      monthChanged: function (e) {
-        console.log('monthChanged SourceSelection')
-        for (var i = 0; i < this.months.length; i++) {
-          if (this.months[i].id === e.target.value) {
-            this.month = this.months[i]
-          }
-        }
-        this.$emit('monthChanged', e.target.value)
       },
       dayChanged: function (e) {
         console.log('dayChanged SourceSelection')
@@ -168,6 +157,15 @@
           }
         }
         this.$emit('dayChanged', e.target.value)
+      },
+      monthChanged: function (e) {
+        console.log('monthChanged SourceSelection')
+        for (var i = 0; i < this.months.length; i++) {
+          if (this.months[i].id === e.target.value) {
+            this.month = this.months[i]
+          }
+        }
+        this.$emit('monthChanged', e.target.value)
       },
       reeupChanged: function (e) {
         console.log('reeupChanged SourceSelection')
@@ -191,6 +189,7 @@
       }
     },
     created: function () {
+      this.isAdmin = window.localStorage.getItem('token') === 'admin'
       this.months = [
         {id: 1, name: 'Enero'},
         {id: 2, name: 'Febrero'},
@@ -206,6 +205,11 @@
         {id: 12, name: 'Diciembre'}
       ]
       this.month = (new Date()).getMonth() + 1
+      this.day = 1
+      this.days = []
+      for (let i = 1; i <= 31; ++i) {
+        this.days.push({id: i, name: i})
+      }
       this.years = [
         {id: 2013, name: 2013},
         {id: 2014, name: 2014},
@@ -214,10 +218,7 @@
         {id: 2017, name: 2017},
         {id: 2018, name: 2018}
       ]
-      this.day = 1
-      for (let i = 1; i <= 31; ++i) {
-        this.days.push({id: i, name: i})
-      }
+      this.year = 1900 + new Date().getYear()
       this.modelos = []
       this.data = null
       this.$http.get('http://192.168.43.46:80/datadin2/data')

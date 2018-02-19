@@ -13,24 +13,79 @@
           <th v-show="!hide_description">
             Descripción
           </th>
-          <th style="text-align: right">
-            Apertura / Plan del año
-          </th>
-          <th style="text-align: right">
-            Plan acumulado
-          </th>
-          <th style="text-align: right">
-            Real hasta la fecha
+          <th v-if="modeloX.ColumnNames != null" style="text-align: right" v-for="n in modeloX.ColumnCount">
+            {{modeloX.ColumnNames.split(',')[n-1]}}
           </th>
         </tr>
         </thead>
         <tbody>
-        <tr v-for="report in reports">
-          <td>{{report.Id}}</td>
-          <td v-show="!hide_description">{{report.Descripcion}}</td>
-          <td style="text-align: right">{{formatPrice(report.C1)}}</td>
-          <td style="text-align: right">{{formatPrice(report.C2)}}</td>
-          <td style="text-align: right">{{formatPrice(report.C3)}}</td>
+        <tr v-for="(record, index) in reports">
+          <td>{{record.RowId}}</td>
+          <td v-show="!hide_description">{{rowsModel[index].Description}}</td>
+
+          <th class="editable" style="text-align: right; cursor: pointer;" v-show="modeloX.ColumnCount > 0">
+            <div>
+              <label>
+                {{formatPrice(record.C01)}}
+              </label>
+            </div>
+          </th>
+          <th class="editable" style="text-align: right; cursor: pointer;" v-show="modeloX.ColumnCount > 1">
+            <div>
+              <label>
+                {{formatPrice(record.C02)}}
+              </label>
+            </div>
+          </th>
+          <th class="editable" style="text-align: right; cursor: pointer;" v-show="modeloX.ColumnCount > 2">
+            <div>
+              <label>
+                {{formatPrice(record.C03)}}
+              </label>
+            </div>
+          </th>
+          <th class="editable" style="text-align: right; cursor: pointer;" v-show="modeloX.ColumnCount > 3">
+            <div>
+              <label>
+                {{formatPrice(record.C04)}}
+              </label>
+            </div>
+          </th>
+          <th class="editable" style="text-align: right; cursor: pointer;" v-show="modeloX.ColumnCount > 4">
+            <div>
+              <label>
+                {{formatPrice(record.C05)}}
+              </label>
+            </div>
+          </th>
+          <th class="editable" style="text-align: right; cursor: pointer;" v-show="modeloX.ColumnCount > 5">
+            <div>
+              <label>
+                {{formatPrice(record.C06)}}
+              </label>
+            </div>
+          </th>
+          <th class="editable" style="text-align: right; cursor: pointer;" v-show="modeloX.ColumnCount > 6">
+            <div>
+              <label>
+                {{formatPrice(record.C07)}}
+              </label>
+            </div>
+          </th>
+          <th class="editable" style="text-align: right; cursor: pointer;" v-show="modeloX.ColumnCount > 7">
+            <div>
+              <label>
+                {{formatPrice(record.C08)}}
+              </label>
+            </div>
+          </th>
+          <th class="editable" style="text-align: right; cursor: pointer;" v-show="modeloX.ColumnCount > 8">
+            <div>
+              <label>
+                {{formatPrice(record.C09)}}
+              </label>
+            </div>
+          </th>
         </tr>
         </tbody>
       </table>
@@ -41,10 +96,13 @@
 <script>
   export default {
     name: 'newslist',
-    props: ['year', 'month', 'reeup', 'modelo', 'grupo', 'divition'],
+    props: ['year', 'month', 'reeup', 'modelo', 'grupo', 'divition', 'day'],
     data () {
       return {
+        modeloX: [],
         reports: [],
+        rowsAll: [],
+        rowsModel: [],
         status: 'Cargando...',
         hide_description: false
       }
@@ -55,18 +113,32 @@
         return val.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')
       },
       updateList: function (month, year, reeup, modelo, grupo, divition) {
+        if (modelo === null || modelo === undefined) {
+          this.status = 'No hay datos que mostrar :('
+          return
+        }
+        this.rowsModel = []
+        for (let i = 0; i < this.rowsAll.length; ++i) {
+          if (parseInt(this.rowsAll[i].ModelId) === parseInt(modelo.Id)) {
+            var element = this.rowsAll[i]
+            element.edit = true
+            this.rowsModel.push(element)
+          }
+        }
         console.log('updateList')
-        modelo = modelo === 0 ? 5920 : modelo
-        year = year === 0 ? 2017 : year
+        modelo = modelo.Id
+        year = year === 0 ? 2018 : year
         this.reports = []
         this.status = 'Cargando...'
-        this.$http.get(encodeURI('http://192.168.43.65:29530/datadin/ef?Model=' + modelo + '&Year=' + year + '&Month=' + month + '&Empresa=' + reeup + '&Grupo=' + grupo + '&Division=' + divition))
+        this.$http.get(encodeURI('http://192.168.43.46:80/datadin2/computed/records?Model=' + modelo + '&Year=' + year + '&Month=' + month + '&Day=' + this.day + '&Enterprise=' + reeup + '&Group=' + grupo + '&Division=' + divition))
           .then(response => {
             this.reports = response.data
             if (this.reports.length === 0) {
               this.status = 'No hay datos que mostrar :('
             }
           })
+
+        this.modeloX = this.modelo
       },
       updateMonth: function (month) {
         this.month = month
@@ -76,11 +148,16 @@
         this.year = year
         this.updateList(this.month, this.year, this.reeup, this.modelo, this.grupo, this.divition)
       },
+      updateDay: function (day) {
+        this.day = day
+        this.updateList(this.month, this.year, this.reeup, this.modelo, this.grupo, this.divition)
+      },
       updateReeup: function (reeup) {
         this.reeup = reeup
         this.updateList(this.month, this.year, this.reeup, this.modelo, this.grupo, this.divition)
       },
       updateModelo: function (modelo) {
+        this.modeloX = modelo
         this.updateList(this.month, this.year, this.reeup, this.modelo, this.grupo, this.divition)
       },
       updateGrupo: function (grupo) {
@@ -93,12 +170,20 @@
       }
     },
     created: function () {
+      this.$http.get('http://192.168.43.46:80/datadin2/rows')
+        .then(response => {
+          this.rowsAll = response.data
+        })
       this.updateList(this.month, this.year, this.reeup, this.modelo, this.grupo, this.divition)
     },
     watch: {
       year: function (val) {
         console.log('updateYear Newslist.vue')
         this.updateYear(val)
+      },
+      day: function (val) {
+        console.log('updateDay Newslist.vue')
+        this.updateDay(val)
       },
       month: function (val) {
         console.log('updateMonth Newslist.vue')

@@ -30,10 +30,10 @@
     },
     created: function () {
       this.data = null
-      this.$http.get('http://192.168.43.65:29530/datadin/data')
+      this.$http.get('http://192.168.43.46:80/datadin2/data')
         .then(response => {
           this.data = response.data
-          this.modelos = response.data.Modelos
+          this.modelos = response.data.Models
         })
     }
   }
