@@ -3,6 +3,7 @@
     <div>
       <div class="jumbotron">
         <h2><span class="glyphicon glyphicon-list-alt"></span>&nbsp;Consultas</h2>
+
         <div class="row">
           <div class="col-sm-3">
             <h4>Division</h4>
@@ -16,13 +17,6 @@
             <select class="form-control" v-on:change="grupoChanged" v-model="grupo">
               <option value="">Todos</option>
               <option v-for="grupo in grupos" v-bind:value="grupo.Id">{{grupo.Name}}</option>
-            </select>
-          </div>
-          <div class="col-sm-3">
-            <h4>Empresas</h4>
-            <select class="form-control" v-on:change="reeupChanged" v-model="reeup">
-              <option value="">Todas</option>
-              <option v-for="reeup in reeups" v-bind:value="reeup.Id">{{reeup.Name}}</option>
             </select>
           </div>
           <div class="col-sm-3">
@@ -61,12 +55,9 @@
             </select>
           </div>
         </div>
-        <div class="row" style="padding-top: 1em">
-          <label class="" style="margin-top: 1em; font-size: 1.2em">Filtrar por rango</label>
-          <input v-model="range" type="checkbox" v-on:change="rangeChanged"/>
-
-          <label class="" style="margin-top: 1em; font-size: 1.2em; margin-left: 1em;">Incluir datos parciales</label>
-          <input v-model="realtimeC" type="checkbox" v-on:change="realTimeChanged"/>
+        <div class="row" style="padding-top: 1em;">
+          <label class="" style="margin-top: 1em; font-size: 1.2em; display: none;">Filtrar por rango</label>
+          <input v-model="range" type="checkbox" v-on:change="rangeChanged" style="display: none"/>
 
           <span style="float: right;" class="btn btn-success" v-on:click="loadData()">Cargar datos</span>
         </div>
@@ -89,14 +80,11 @@
         month1: '',
         modelos: [],
         modelo: null,
-        reeups: [],
-        reeup: '',
         divitions: [],
         divition: '',
         grupos: [],
         grupo: '',
-        range: false,
-        realtimeC: false
+        range: false
       }
     },
     methods: {
@@ -113,8 +101,6 @@
         if (this.divition === '') {
           this.grupos = []
           this.grupo = ''
-          this.reeups = this.data.Enterprises
-          this.reeup = ''
         } else {
           this.grupos = []
           this.grupo = ''
@@ -123,52 +109,12 @@
               this.grupos.push(this.data.Groups[j])
             }
           }
-          this.reeups = []
-          this.reeup = ''
-          for (var k = 0; k < this.data.Enterprises.length; ++k) {
-            if (parseInt(this.data.Enterprises[k].DivisionId) === parseInt(this.divition)) {
-              console.log(this.data.Enterprises[k].Nombre)
-              this.reeups.push(this.data.Enterprises[k])
-            }
-          }
         }
         this.$emit('divitionChanged', this.divition)
         this.$emit('grupoChanged', this.grupo)
-        this.$emit('reeupChanged', this.reeup)
       },
       grupoChanged: function (e) {
         console.log('grupoChanged SourceSelection')
-        for (var i = 0; i < this.grupos.length; i++) {
-          if (this.grupos[i].id === e.target.value) {
-            this.grupo = this.grupos[i]
-          }
-        }
-        if (this.divition === '') {
-          this.grupos = []
-          this.reeups = this.data.Enterprises
-          this.grupo = ''
-          this.reeup = ''
-        } else {
-          if (this.grupo === '') {
-            this.reeups = []
-            this.reeup = ''
-            for (var p = 0; p < this.data.Enterprises.length; ++p) {
-              if (parseInt(this.data.Enterprises[p].DivisionId) === parseInt(this.divition)) {
-                this.reeups.push(this.data.Enterprises[p])
-              }
-            }
-            this.reeup = ''
-          } else {
-            this.reeups = []
-            for (var l = 0; l < this.data.Enterprises.length; ++l) {
-              if (parseInt(this.data.Enterprises[l].GroupId) === parseInt(this.grupo) && parseInt(this.data.Enterprises[l].DivisionId) === parseInt(this.divition)) {
-                this.reeups.push(this.data.Enterprises[l])
-              }
-            }
-            this.reeup = ''
-          }
-        }
-        this.$emit('reeupChanged', this.reeup)
         this.$emit('grupoChanged', this.grupo)
       },
       month1Changed: function (e) {
@@ -188,10 +134,6 @@
           }
         }
         this.$emit('day1Changed', e.target.value)
-      },
-      realTimeChanged: function (e) {
-        console.log('realTimeChanged SourceSelection')
-        this.$emit('realTimeChanged', e.target.value)
       },
       rangeChanged: function (e) {
         console.log('rangeChanged SourceSelection')
@@ -214,15 +156,6 @@
           }
         }
         this.$emit('dayChanged', e.target.value)
-      },
-      reeupChanged: function (e) {
-        console.log('reeupChanged SourceSelection')
-        for (var i = 0; i < this.reeups.length; i++) {
-          if (this.reeups[i].id === e.target.value) {
-            this.reeup = this.reeups[i]
-          }
-        }
-        this.$emit('reeupChanged', e.target.value)
       },
       modeloChanged: function (e) {
         console.log('modeloChanged SourceSelection')
@@ -284,9 +217,12 @@
       this.$http.get('http://192.168.100.5:80/datadin2/data')
         .then(response => {
           this.data = response.data
-          this.reeups = response.data.Enterprises
           this.divitions = response.data.Divisions
-          this.modelos = response.data.Models
+          for (let i = 0; i < response.data.Models.length; ++i) {
+            if (response.data.Models[i].IsEFModel === true) {
+              this.modelos.push(response.data.Models[i])
+            }
+          }
         })
     }
   }

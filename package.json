@@ -16,6 +16,8 @@
   "dependencies": {
     "axios": "^0.17.1",
     "bootstrap-vue": "^2.0.0-rc.1",
+    "chart.js": "^2.7.2",
+    "js-base64": "^2.4.3",
     "spinkit": "^1.2.5",
     "vue": "^2.4.2",
     "vue-moment": "^3.1.0",

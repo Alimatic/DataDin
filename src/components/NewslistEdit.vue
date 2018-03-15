@@ -144,6 +144,8 @@
   </div>
 </template>
 <script>
+  var Base64 = require('js-base64').Base64
+
   export default {
     name: 'newslist',
     props: ['year', 'month', 'reeup', 'modelo', 'grupo', 'divition', 'reload', 'day'],
@@ -167,9 +169,23 @@
         var self = this
         reader.onloadend = function (e) {
           var result = this.result
-          self.$http.get('http://192.168.43.46:80/datadin2/template/import?Year=' + self.year + '&Month=' + self.month + '&Day=' + self.day + '&ModelId=' + self.modelo.Id + '&EnterpriseId=' + self.reeup + '&ImportData=' + result).then(response => {
-            // document.getElementById('fileInput').files = []
+          var result64 = Base64.encode(result)
+          console.log(result)
+          // self.$http.get('http://192.168.100.5:80/datadin2/template/import?Year=' + self.year + '&Month=' + self.month + '&Day=' + self.day + '&ModelId=' + self.modelo.Id + '&EnterpriseId=' + self.reeup + '&ImportData=' + result).then(response => {
+          //   document.getElementById('fileInput').value = ''
+            // self.updateList()
+          // })
+          self.$http.post('http://192.168.100.5:80/datadin2/template/import', {
+            FileData: result64,
+            FileName: file.name,
+            Year: self.year,
+            Month: self.month,
+            Day: self.day,
+            ModelId: self.modelo.Id,
+            EnterpriseId: self.reeup
+          }).then(response => {
             self.updateList()
+            document.getElementById('fileInput').value = ''
           })
         }
 
@@ -194,25 +210,27 @@
       },
       unlockModel: function () {
         console.log('unlockModel')
-        this.$http.get('http://192.168.43.46:80/datadin2/template/lock?Year=' + this.year + '&Month=' + this.month + '&ModelId=' + this.modelo.Id + '&Day=' + this.day + '&Locked=' + false)
+        this.$http.get('http://192.168.100.5:80/datadin2/template/lock?Year=' + this.year + '&Month=' + this.month + '&ModelId=' + this.modelo.Id + '&Day=' + this.day + '&Locked=' + false)
           .then(response => {
             this.updateList()
           })
       },
       lockModel: function () {
         console.log('lockModel')
-        this.$http.get('http://192.168.43.46:80/datadin2/template/lock?Year=' + this.year + '&Month=' + this.month + '&ModelId=' + this.modelo.Id + '&Day=' + this.day + '&Locked=' + true)
+        this.$http.get('http://192.168.100.5:80/datadin2/template/lock?Year=' + this.year + '&Month=' + this.month + '&ModelId=' + this.modelo.Id + '&Day=' + this.day + '&Locked=' + true)
           .then(response => {
             this.updateList()
           })
       },
       edit: function (rowId, column, val) {
-        this.$http.get('http://192.168.43.46:80/datadin2/record/value/set?Year=' + this.year + '&Month=' + this.month + '&Model=' + this.modeloX.Id + '&Enterprise=' + this.reeup + '&Row=' + rowId + '&Column=' + column + '&Value=' + val)
+        this.$http.get('http://192.168.100.5:80/datadin2/record/value/set?Year=' + this.year + '&Month=' + this.month + '&Model=' + this.modeloX.Id + '&Enterprise=' + this.reeup + '&Row=' + rowId + '&Column=' + column + '&Value=' + val)
           .then(response => {
             // this.updateList()
           })
       },
       updateList: function () {
+        this.status = 'Cargando...'
+        this.records = []
         // var self = this
         // this.modelos.forEach(function (val) {
         //   if (parseInt(val.Id) === parseInt(self.modelo)) {
@@ -220,7 +238,6 @@
         //   }
         // })
         console.log('updateList')
-
         this.rowsModel = []
         for (let i = 0; i < this.rowsAll.length; ++i) {
           if (parseInt(this.rowsAll[i].ModelId) === parseInt(this.modelo.Id)) {
@@ -229,9 +246,12 @@
             this.rowsModel.push(element)
           }
         }
-        this.records = []
+        if (parseInt(this.modelo.FrequencyId) === 2 && parseInt(this.day) !== 1) {
+          this.status = 'Este modelo es mensual, debe seleccionar el dia 1'
+          return
+        }
         this.status = 'Cargando...'
-        this.$http.get('http://192.168.43.46:80/datadin2/template/records?Year=' + this.year + '&Month=' + this.month + '&Day=' + this.day + '&ModelId=' + this.modelo.Id + '&EnterpriseId=' + this.reeup)
+        this.$http.get('http://192.168.100.5:80/datadin2/template/records?Year=' + this.year + '&Month=' + this.month + '&Day=' + this.day + '&ModelId=' + this.modelo.Id + '&EnterpriseId=' + this.reeup)
           .then(response => {
             this.records = response.data.Records
             this.locked = response.data.Template.Locked
@@ -273,13 +293,13 @@
       }
     },
     created: function () {
-      this.isAdmin = window.localStorage.getItem('token') === 'admin'
+      this.isAdmin = window.localStorage.getItem('role') === 'admin'
       this.rows = 0
-      this.$http.get('http://192.168.43.46:80/datadin2/models')
+      this.$http.get('http://192.168.100.5:80/datadin2/models')
         .then(response => {
           this.modelos = response.data
         })
-      this.$http.get('http://192.168.43.46:80/datadin2/rows')
+      this.$http.get('http://192.168.100.5:80/datadin2/rows')
         .then(response => {
           this.rowsAll = response.data
         })

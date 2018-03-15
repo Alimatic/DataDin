@@ -2,22 +2,36 @@
 
   <div class="container" id="app" style="margin: 2em; width: auto;">
 
-    <SourceSelection v-on:realTimeChanged="realTimeChanged" v-on:monthChanged="monthChanged" v-on:month1Changed="month1Changed" v-on:loadData="loadData" v-on:reeupChanged="reeupChanged"
-                     v-on:divitionChanged="divitionChanged" v-on:grupoChanged="grupoChanged" v-on:dayChanged="dayChanged" v-on:day1Changed="day1Changed"
-                     v-on:modeloChanged="modeloChanged" v-on:rangeChanged="rangeChanged"></SourceSelection>
-    <Newslist v-bind:loaddata="loaddata" v-bind:realtimeC="realtimeC" v-bind:month="month" v-bind:month1="month1" v-bind:modelo="modelo" v-bind:reeup="reeup" v-bind:divition="divition" v-bind:grupo="grupo" v-bind:day="day" v-bind:day1="day1" v-bind:range="range"></Newslist>
+    <SourceSelectionApaisado v-on:monthChanged="monthChanged"
+                             v-on:month1Changed="month1Changed"
+                             v-on:loadData="loadData"
+                             v-on:divitionChanged="divitionChanged"
+                             v-on:grupoChanged="grupoChanged"
+                             v-on:dayChanged="dayChanged"
+                             v-on:day1Changed="day1Changed"
+                             v-on:modeloChanged="modeloChanged"
+                             v-on:rangeChanged="rangeChanged"></SourceSelectionApaisado>
+    <NewslistApaisado v-bind:loaddata="loaddata"
+                      v-bind:month="month"
+                      v-bind:month1="month1"
+                      v-bind:modelo="modelo"
+                      v-bind:divition="divition"
+                      v-bind:grupo="grupo"
+                      v-bind:day="day"
+                      v-bind:day1="day1"
+                      v-bind:range="range"></NewslistApaisado>
 
   </div>
 </template>
 <script>
-  import Newslist from './Newslist'
-  import SourceSelection from './SourceSelection'
+  import NewslistApaisado from './NewslistApaisado'
+  import SourceSelectionApaisado from './SourceSelectionApaisado'
 
   export default {
     name: 'app',
     components: {
-      Newslist,
-      SourceSelection
+      NewslistApaisado,
+      SourceSelectionApaisado
     },
     data () {
       return {
@@ -26,16 +40,14 @@
         day: 1,
         day1: 1,
         modelo: '',
-        reeup: '',
         divition: '',
         grupo: '',
         range: false,
-        loaddata: false,
-        realtimeC: false
+        loaddata: false
       }
     },
     methods: {
-      loadData: function (month) {
+      loadData: function () {
         console.log('loadData App.vue')
         this.loaddata = !this.loaddata
       },
@@ -63,10 +75,6 @@
         console.log('modeloChanged App.vue')
         this.modelo = modelo
       },
-      reeupChanged: function (reeup) {
-        console.log('reeupChanged App.vue')
-        this.reeup = reeup
-      },
       divitionChanged: function (divition) {
         console.log('divitionChanged App.vue')
         this.divition = divition
@@ -74,10 +82,6 @@
       grupoChanged: function (grupo) {
         console.log('grupoChanged App.vue')
         this.grupo = grupo
-      },
-      realTimeChanged: function (realtime) {
-        console.log('realtimeChanged App.vue')
-        this.realtimeC = !this.realtimeC
       }
     }
   }

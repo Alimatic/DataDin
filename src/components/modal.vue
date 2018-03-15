@@ -7,7 +7,7 @@
         this.$emit('close')
       },
       edit: function (rowId, modelId, description) {
-        this.$http.get('http://192.168.43.46:80/datadin2/model/update/row?Id=' + rowId + '&ModelId=' + modelId + '&Description=' + description)
+        this.$http.get('http://192.168.100.5:80/datadin2/model/update/row?Id=' + rowId + '&ModelId=' + modelId + '&Description=' + description)
           .then(response => {
           })
       }

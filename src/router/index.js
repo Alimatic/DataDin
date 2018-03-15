@@ -10,20 +10,13 @@ import HomePage from '@/components/HomePage'
 import ModelosAdminList from '@/components/ModelosAdminList'
 import ModelosAdminCreate from '@/components/ModelosAdminCreate'
 import Login from '@/components/Login'
-import Logout from '@/components/Logout'
+import Usuarios from '@/components/Usuarios'
+import Apaisado from '@/components/Apaisado'
 
 Vue.use(Router)
 
 export default new Router({
   routes: [
-    {
-      path: '/logout',
-      name: 'logout',
-      component: Logout,
-      meta: {
-        requiresLogin: false
-      }
-    },
     {
       path: '/login',
       name: 'login',
@@ -38,7 +31,17 @@ export default new Router({
       component: Datadin,
       meta: {
         requiresLogin: true,
-        requiredPermissions: ['admin'],
+        requiredPermissions: ['admin', 'manager'],
+        permissionType: 'AtLeastOne' // options: AtLeastOne, CombinationRequired
+      }
+    },
+    {
+      path: '/ap',
+      name: 'Apaisado',
+      component: Apaisado,
+      meta: {
+        requiresLogin: true,
+        requiredPermissions: ['admin', 'manager'],
         permissionType: 'AtLeastOne' // options: AtLeastOne, CombinationRequired
       }
     },
@@ -48,7 +51,7 @@ export default new Router({
       component: Divisiones,
       meta: {
         requiresLogin: true,
-        requiredPermissions: ['admin'],
+        requiredPermissions: ['admin', 'manager'],
         permissionType: 'AtLeastOne' // options: AtLeastOne, CombinationRequired
       }
     },
@@ -58,7 +61,7 @@ export default new Router({
       component: Filas,
       meta: {
         requiresLogin: true,
-        requiredPermissions: ['admin'],
+        requiredPermissions: ['admin', 'manager'],
         permissionType: 'AtLeastOne' // options: AtLeastOne, CombinationRequired
       }
     },
@@ -68,7 +71,7 @@ export default new Router({
       component: Modelos,
       meta: {
         requiresLogin: true,
-        requiredPermissions: ['admin'],
+        requiredPermissions: ['admin', 'manager'],
         permissionType: 'AtLeastOne' // options: AtLeastOne, CombinationRequired
       }
     },
@@ -78,7 +81,7 @@ export default new Router({
       component: Empresas,
       meta: {
         requiresLogin: true,
-        requiredPermissions: ['admin'],
+        requiredPermissions: ['admin', 'manager'],
         permissionType: 'AtLeastOne' // options: AtLeastOne, CombinationRequired
       }
     },
@@ -89,7 +92,7 @@ export default new Router({
       inherit: true,
       meta: {
         requiresLogin: true,
-        requiredPermissions: ['admin'],
+        requiredPermissions: ['admin', 'manager'],
         permissionType: 'AtLeastOne' // options: AtLeastOne, CombinationRequired
       }
     },
@@ -100,7 +103,7 @@ export default new Router({
       inherit: true,
       meta: {
         requiresLogin: true,
-        requiredPermissions: ['admin'],
+        requiredPermissions: ['admin', 'manager'],
         permissionType: 'AtLeastOne' // options: AtLeastOne, CombinationRequired
       }
     },
@@ -111,15 +114,29 @@ export default new Router({
       inherit: true,
       meta: {
         requiresLogin: true,
+        requiredPermissions: ['admin', 'manager'],
+        permissionType: 'AtLeastOne' // options: AtLeastOne, CombinationRequired
+      }
+    },
+    {
+      path: '/usuarios',
+      name: 'usuarios',
+      component: Usuarios,
+      inherit: true,
+      meta: {
+        requiresLogin: true,
         requiredPermissions: ['admin'],
         permissionType: 'AtLeastOne' // options: AtLeastOne, CombinationRequired
       }
     },
     {
       path: '*',
+      name: 'home',
       component: HomePage,
       meta: {
-        requiresLogin: false
+        requiresLogin: true,
+        requiredPermissions: ['admin', 'manager'],
+        permissionType: 'AtLeastOne' // options: AtLeastOne, CombinationRequired
       }
     }
   ]

@@ -39,7 +39,7 @@
     },
     created: function () {
       this.data = null
-      this.$http.get('http://192.168.43.46:80/datadin2/data')
+      this.$http.get('http://192.168.100.5:80/datadin2/data')
         .then(response => {
           this.data = response.data
           this.divitions = response.data.Divisions

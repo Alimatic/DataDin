@@ -145,22 +145,22 @@
       }
     },
     created: function () {
-      this.isAdmin = window.localStorage.getItem('token') === 'admin'
+      this.isAdmin = window.localStorage.getItem('role') === 'admin'
       this.create_model = false
       this.models = []
       this.frequencies = []
       this.rows = []
-      this.$http.get('http://192.168.43.46:80/datadin2/models')
+      this.$http.get('http://192.168.100.5:80/datadin2/models')
         .then(response => {
           this.models = response.data
           this.status = 'No hay datos que mostrar'
         })
-      this.$http.get('http://192.168.43.46:80/datadin2/frequencies')
+      this.$http.get('http://192.168.100.5:80/datadin2/frequencies')
         .then(response => {
           this.frequencies = response.data
           this.FrequencyId = 2
         })
-      this.$http.get('http://192.168.43.46:80/datadin2/rows')
+      this.$http.get('http://192.168.100.5:80/datadin2/rows')
         .then(response => {
           this.rows = response.data
         })
@@ -193,7 +193,7 @@
       },
       createModel: function (e) {
         console.log(this.FrequencyId)
-        this.$http.get('http://192.168.43.46:80/datadin2/model/create?Id=' + this.Id + '&RowCount=' + this.RowCount + '&ColumnCount=' + this.ColumnCount + '&FrequencyId=' + this.FrequencyId + '&IsEFModel=' + this.IsFinalcial + '&Description=' + this.Descripcion + '&ColumnNames=' + this.ColumnsName)
+        this.$http.get('http://192.168.100.5:80/datadin2/model/create?Id=' + this.Id + '&RowCount=' + this.RowCount + '&ColumnCount=' + this.ColumnCount + '&FrequencyId=' + this.FrequencyId + '&IsEFModel=' + this.IsFinalcial + '&Description=' + this.Descripcion + '&ColumnNames=' + this.ColumnsName)
           .then(response => {
             window.location.reload()
             // this.Id = 0
@@ -204,7 +204,7 @@
             // this.create_model = false
             // this.ColumnsName = ''
             // this.Descripcion = ''
-            // this.$http.get('http://192.168.43.46:80/datadin2/models')
+            // this.$http.get('http://192.168.100.5:80/datadin2/models')
             //   .then(response => {
             //     this.models = response.data
             //     this.status = 'No hay datos que mostrar'
@@ -212,9 +212,9 @@
           })
       },
       deleteModel: function (modelId) {
-        this.$http.get('http://192.168.43.46:80/datadin2/model/delete/?' + modelId)
+        this.$http.get('http://192.168.100.5:80/datadin2/model/delete/?' + modelId)
           .then(response => {
-            this.$http.get('http://192.168.43.46:80/datadin2/models')
+            this.$http.get('http://192.168.100.5:80/datadin2/models')
               .then(response => {
                 this.models = response.data
                 this.status = 'No hay datos que mostrar'

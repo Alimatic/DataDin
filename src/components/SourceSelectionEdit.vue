@@ -95,7 +95,9 @@
         }
         if (this.divition === '') {
           this.grupos = []
+          this.grupo = ''
           this.reeups = this.data.Empresas
+          this.reeup = ''
         } else {
           this.grupos = []
           this.grupo = ''
@@ -105,15 +107,17 @@
             }
           }
           this.reeups = []
+          this.reeup = ''
           for (var k = 0; k < this.data.Empresas.length; ++k) {
             if (parseInt(this.data.Empresas[k].DivisionId) === parseInt(this.divition)) {
               console.log(this.data.Empresas[k].Nombre)
               this.reeups.push(this.data.Empresas[k])
             }
           }
-          this.reeup = ''
         }
-        this.$emit('divitionChanged', e.target.value)
+        this.$emit('divitionChanged', this.divition)
+        this.$emit('grupoChanged', this.grupo)
+        this.$emit('reeupChanged', this.reeup)
       },
       grupoChanged: function (e) {
         console.log('grupoChanged SourceSelection')
@@ -147,7 +151,8 @@
             this.reeup = ''
           }
         }
-        this.$emit('grupoChanged', e.target.value)
+        this.$emit('reeupChanged', this.reeup)
+        this.$emit('grupoChanged', this.grupo)
       },
       dayChanged: function (e) {
         console.log('dayChanged SourceSelection')
@@ -189,7 +194,7 @@
       }
     },
     created: function () {
-      this.isAdmin = window.localStorage.getItem('token') === 'admin'
+      this.isAdmin = window.localStorage.getItem('role') === 'admin'
       this.months = [
         {id: 1, name: 'Enero'},
         {id: 2, name: 'Febrero'},
@@ -221,7 +226,7 @@
       this.year = 1900 + new Date().getYear()
       this.modelos = []
       this.data = null
-      this.$http.get('http://192.168.43.46:80/datadin2/data')
+      this.$http.get('http://192.168.100.5:80/datadin2/data')
         .then(response => {
           this.data = response.data
           this.reeups = response.data.Enterprises

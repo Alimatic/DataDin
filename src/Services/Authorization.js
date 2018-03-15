@@ -8,13 +8,14 @@ export default {
    */
   authorize (requiresLogin, requiredPermissions, permissionType) {
     let result = 'authorized'
-    let user = JSON.parse(window.localStorage.getItem('auth-user')) || undefined
     let hasPermission = true
     let token = window.localStorage.getItem('token') || undefined
+    let role = window.localStorage.getItem('role') || undefined
+    console.log(role)
     let loweredPermissions = []
     let permission, i
 
-    if (requiresLogin === true && (token === undefined && user === undefined)) {
+    if (requiresLogin === true && (token === undefined)) {
       return 'loginIsRequired'
     }
 
@@ -24,7 +25,7 @@ export default {
 
     if (requiredPermissions) {
       loweredPermissions = []
-      loweredPermissions.push(user.role.toLowerCase())
+      loweredPermissions.push(role.toLowerCase())
 
       for (i = 0; i < requiredPermissions.length; i++) {
         permission = requiredPermissions[i].toLowerCase()
