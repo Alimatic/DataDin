@@ -144,7 +144,7 @@
   </div>
 </template>
 <script>
-  var Base64 = require('js-base64').Base64
+  // var Base64 = require('js-base64').Base64
 
   export default {
     name: 'newslist',
@@ -169,14 +169,15 @@
         var self = this
         reader.onloadend = function (e) {
           var result = this.result
-          var result64 = Base64.encode(result)
+          console.log(result)
+          // var result64 = Base64.encode(result)
           console.log(result)
           // self.$http.get('http://192.168.100.5:80/datadin2/template/import?Year=' + self.year + '&Month=' + self.month + '&Day=' + self.day + '&ModelId=' + self.modelo.Id + '&EnterpriseId=' + self.reeup + '&ImportData=' + result).then(response => {
           //   document.getElementById('fileInput').value = ''
             // self.updateList()
           // })
           self.$http.post('http://192.168.100.5:80/datadin2/template/import', {
-            FileData: result64,
+            FileData: result,
             FileName: file.name,
             Year: self.year,
             Month: self.month,
@@ -189,7 +190,8 @@
           })
         }
 
-        reader.readAsText(file)
+        // reader.readAsText(file)
+        reader.readAsDataURL(file)
       },
       sendData: function () {
         document.getElementById('fileInput').click()
@@ -223,7 +225,7 @@
           })
       },
       edit: function (rowId, column, val) {
-        this.$http.get('http://192.168.100.5:80/datadin2/record/value/set?Year=' + this.year + '&Month=' + this.month + '&Model=' + this.modeloX.Id + '&Enterprise=' + this.reeup + '&Row=' + rowId + '&Column=' + column + '&Value=' + val)
+        this.$http.get('http://192.168.100.5:80/datadin2/record/value/set?Year=' + this.year + '&Month=' + this.month + '&Day=' + this.day + '&Model=' + this.modeloX.Id + '&Enterprise=' + this.reeup + '&Row=' + rowId + '&Column=' + column + '&Value=' + val)
           .then(response => {
             // this.updateList()
           })
