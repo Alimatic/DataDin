@@ -164,20 +164,25 @@
     },
     methods: {
       importData: function () {
-        var file = document.getElementById('fileInput').files[0]
-        var reader = new FileReader()
-        var self = this
+        let file = document.getElementById('fileInput').files[0]
+        let reader = new FileReader()
+        let self = this
         reader.onloadend = function (e) {
-          var result = this.result
+          let result = this.result
+
+          let base64Key = 'base64,'
+          let index = result.indexOf(base64Key) + base64Key.length
+          let base64 = result.substring(index)
+
           console.log(result)
           // var result64 = Base64.encode(result)
-          console.log(result)
+          console.log(base64)
           // self.$http.get('http://192.168.100.5:80/datadin2/template/import?Year=' + self.year + '&Month=' + self.month + '&Day=' + self.day + '&ModelId=' + self.modelo.Id + '&EnterpriseId=' + self.reeup + '&ImportData=' + result).then(response => {
           //   document.getElementById('fileInput').value = ''
             // self.updateList()
           // })
           self.$http.post('http://192.168.100.5:80/datadin2/template/import', {
-            FileData: result,
+            FileData: base64,
             FileName: file.name,
             Year: self.year,
             Month: self.month,
